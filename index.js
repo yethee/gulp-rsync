@@ -84,6 +84,7 @@ module.exports = function(options) {
         'u': options.update,
         'v': !options.silent,
         'z': options.compress,
+        'p': options.perms,
         'exclude': options.exclude,
         'include': options.include,
         'progress': options.progress
@@ -94,6 +95,10 @@ module.exports = function(options) {
       destination: destination,
       cwd: cwd
     };
+
+    if (options.perms === false) {
+      config.options['chmod'] = 'ugo=rwX';
+    }
 
     if (options.clean) {
       if (!options.recursive) {
@@ -110,7 +115,7 @@ module.exports = function(options) {
         data.toString().split('\r').forEach(function(chunk) {
           chunk.split('\n').forEach(function(line, j, lines) {
             log('gulp-rsync:', line, (j < lines.length - 1 ? '\n' : ''));
-          });          
+          });
         });
       };
       config.stdoutHandler = handler;
@@ -128,5 +133,5 @@ module.exports = function(options) {
       }
       cb();
     }.bind(this));
-  }); 
+  });
 };
